@@ -9,8 +9,6 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 
 function Body() {
-    const selectedServer = useSelector(selectOpenServer);
-    var playersonline;
     const url = 'https://api.mcsrvstat.us/2/';
     const [online,setPlayer] = useState([]);
     const [mostpopular,setMostPopular]= useState([])
@@ -26,14 +24,21 @@ function Body() {
                 if(response.data.players !== undefined){
                         console.log(response.data.players.online)
                         var players = response.data.players.online
+                        var versions = response.data.version
+                        var Online = "Online";
                         console.log(players)
                         updateDoc(docu(db, "servers", doc.id),{
-                            "players" : players
+                            "players" : players,
+                            "version" : versions,
+                            "status" : Online
                           })
+                        
                 }
-                else{
+                if(response.data.players === undefined){
+                  var Offline = "Offline";
                     updateDoc(docu(db, "servers", doc.id),{
-                        "players" : 0
+                        "players" : 0,
+                        "status": Offline
                       })
                 }
                 
@@ -62,26 +67,40 @@ function Body() {
         <div className="bg-blue-600 h-screen w-screen">
             <p className="text-white font-bold text-xl mx-7">Most Popular Servers </p>
             <div className="flex flex-row space-x-2 mx-7">
-            {mostpopular.map(({ id, data: { username, domain, rank,players,thumbnail } }) => (
+            {mostpopular.map(({ id, data: { username, domain, rank,website,discord,players,thumbnail,version,status,tags,description } }) => (
           <ServerRow
             id={id}
             key={id}
+            version={version}
+            username={username}
+            status={status}
+            website={website}
+            discord={discord}
             thumbnail={thumbnail}
             domain={domain}
             players={players}
+            description={description}
+            tags={tags} 
           />
         ))}
             
             </div>
             <p className="text-white font-bold text-xl mx-7">Trending Servers </p>
             <div className="flex flex-row space-x-2 mx-7">
-            {usersn.map(({ id, data: { username, domain, rank,players,thumbnail } }) => (
+            {usersn.map(({ id, data: { username, domain, rank,players,website,discord,thumbnail,version,status,tags,description } }) => (
           <ServerRow
             id={id}
             key={id}
+            version={version}
+            username={username}
+            status={status}
+            website={website}
+            discord={discord}
             thumbnail={thumbnail}
             domain={domain}
             players={players}
+            description={description}
+            tags={tags}
           />
         ))}
             

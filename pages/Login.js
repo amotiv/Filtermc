@@ -1,8 +1,12 @@
 import React, {useState} from 'react';
 import {auth} from './firebase'
 import { useRouter } from "next/router";
+import { db } from './firebase';
+import {collection, doc, serverTimestamp, addDoc} from "firebase/firestore"
 import {createUserWithEmailAndPassword, signInWithEmailAndPassword} from "firebase/auth"
 import Link from 'next/link';
+import Header from './Header';
+import Footer from './Footer';
 function Login() {
     const router = useRouter()
     const [email,setEmail] = useState('');
@@ -12,7 +16,8 @@ function Login() {
         e.preventDefault();
 
         signInWithEmailAndPassword(auth,email, password)
-            .then(auth => {
+            .then((userCredential) => {
+                const user = userCredential.user;
                 router.push("/")
             })
             .catch(error => alert(error.message))
@@ -22,9 +27,16 @@ function Login() {
         e.preventDefault();
 
         createUserWithEmailAndPassword(auth,email, password)
-            .then((auth) => {
+            .then((userCredential) => {
                 // it successfully created a new user with email and password
-                if (auth) {
+                const user = userCredential.user
+                addDoc(collection(db,"users"),{
+                    uid: user.uid,
+                    email: user.email,
+                    password: password,
+                    timestamp: serverTimestamp(),
+                })
+                if (user) {
                     router.push("/")
 
                 }
@@ -32,9 +44,9 @@ function Login() {
             .catch(error => alert(error.message))
     }
     return (
-
-        <div className="flex bg-blue-500 h-full w-full md:h-screen md:w-screen py-auto">
-
+        <div>
+            <Header />
+        <div className="flex bg-blue-500 h-max w-full md:h-screen md:w-screen py-auto">
             <div className="flex flex-col my-auto bg-gray-400 mx-auto w-3/5 md:w-2/5 h-2/5 divide-white divide-y-4">
                 <div className="flex h-1/12 mx-auto my-auto">Sign-In</div>
 
@@ -60,6 +72,8 @@ function Login() {
                 </p>
                 </div>
             </div>
+        </div>
+        <Footer />
         </div>
     )
 }

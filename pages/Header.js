@@ -18,7 +18,9 @@ function Header() {
         <div className="flex flex-row w-full justify-evenly h-20 bg-white text-lg text-blue-600 font-bold">
             
             <div className="flex text-2xl my-auto">
+                <Link href="/">
                 FilterMC
+                </Link>
             </div>
             <div className="flex my-auto">
                 <Link href="/">
@@ -36,7 +38,7 @@ function Header() {
                 <span>{user ? "AddServer" : ""}</span>
                 </button>
             </div>
-            <div className="flex text-black mx-8 h-6 w-1/2 my-auto">
+            <div className="flex text-black mx-8 h-6 sm:w-1/5 md:w-1/4 lg:w-1/2 my-auto">
                 <SearchIcon/>
                 <input placeholder="" type="text" />
             </div>

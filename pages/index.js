@@ -5,12 +5,12 @@ import Body from './Body'
 import Header from './Header'
 import Login from './Login'
 import axios from 'axios';
-import ServerInfo from './ServerInfo'
 import Link from 'next/link'
 import {login,selectUser} from "../reducers/userSlice"
 import { useDispatch,useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import {auth} from "./firebase"
+import Footer from './Footer'
  
 export default function Home() {
   const ip = 'pvp.thearchon.net'
@@ -39,6 +39,7 @@ export default function Home() {
 
       <Header />
       <Body />
+      <Footer />
     </div>
     
   )

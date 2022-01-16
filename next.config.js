@@ -3,4 +3,5 @@ module.exports = {
     domains: ['firebasestorage.googleapis.com'],
   },
   reactStrictMode: true,
+  
 }

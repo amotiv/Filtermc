@@ -1,17 +1,25 @@
 import React from "react";
 import { useState } from "react";
+import {vote} from 'votifier2'
 import { CheckCircleIcon, XIcon } from "@heroicons/react/solid";
+import {useRouter} from 'next/router'
 import {db, storage} from "./firebase"
-import {ref, getDownloadURL, uploadBytes, serverTimestamp} from "firebase/storage"
+import {ref, getDownloadURL, uploadBytes} from "firebase/storage"
+import { serverTimestamp } from "firebase/firestore";
 import { collection,addDoc, doc, updateDoc } from "firebase/firestore"
 import firebase from './firebase'
 import { closeSendMessage } from "../reducers/serverSlice";
 import {useForm,useFormState} from "react-hook-form"
 import {useDispatch} from "react-redux"
 import { getStorage, uploadBytesResumable } from "@firebase/storage";
+import Header from "./Header";
+import Footer from "./Footer";
 
 function SendServer() {
     var custom;
+    const router = useRouter();
+    const [checked, setChecked] = useState(false);
+
     const [fileURL, setFileUrl] = React.useState(null);
     const onFileChange = async (formData) => {
         const file = formData.target.files[0]
@@ -28,11 +36,11 @@ function SendServer() {
         addDoc(collection(db, 'servers'), {
             username: formData.username,
             domain: formData.domain,
-            website: formData.website ? formData.website : "",
-            discord: formData.discord ? formData.discord : "",
+            website: formData.website ? formData.website : "N/A",
+            discord: formData.discord ? formData.discord : "N/A",
             version: null,
             tags: formData.tags,
-            country: formData.country ? formData.country : "",
+            country: formData.country ? formData.country : "Any",
             description: formData.description,
             timestamp: serverTimestamp(),
             votes: null,
@@ -40,16 +48,18 @@ function SendServer() {
             players: null,
             status: null,
             thumbnail: fileURL,
-        
+            votifierip: formData.votifierip ? formData.votifierip : "",
+            votifierport: formData.votifierport ? formData.votifierport : "",
+            votifiertoken: formData.votifiertoken ? formData.votifiertoken : "", 
         });
-        
-        
         dispatch(closeSendMessage());
     }
     
     return (
-        <div className="flex bg-gray-200 h-max w-full">
-            <div className="flex flex-col bg-gray-400 mx-auto my-10 h-screen w-1/3">
+        <div>
+            <Header />
+        <div className="flex bg-blue-500 h-max w-full">
+            <div className="flex flex-col bg-green-400 mx-auto my-10 h-max w-1/3">
             <div className="flex flex-row divide-solid divide-y-4 divide-blue-500 mx-auto w-max">
                 Add Server
             </div>
@@ -144,9 +154,29 @@ function SendServer() {
                 </option>
                 </select>
                 <p className="text-black mx-8 text-xs">Tags(Max 7) </p>
+                <p className="text-black mx-8 text-lg">Enable Votifier(Optional)</p>
+                <input className="flex p-1 mx-8 my-2"type="checkbox" onChange={() => setChecked(!checked)} checked={checked}/>
+                {
+                    checked ? (
+                        <input className="flex p-1 mx-8 my-2" type="text" placeholder="Votifier IP" name="votifierip" ref={register({required: true})} />
+                        
+                    ) : <div></div>
+                }
+                {
+                    checked ? (
+                        <input className="flex p-1 mx-8 my-2" type="text" placeholder="Votifier Port" name="votifierport" ref={register({required: true})} />
+                    ) : <div></div>
+                }
+                {
+                    checked ? (
+                        <input className="flex p-1 mx-8 my-2" type="text" placeholder="Votifier Token" name="votifiertoken" ref={register({required: true})} />
+                    ) : <div></div>
+                }
                 <input className="flex mx-auto my-auto" type="submit" />
             </form>
             </div>
+        </div>
+        <Footer />
         </div>
     )
 }

@@ -5,7 +5,7 @@ import {selectServer} from "../reducers/serverSlice";
 import Image from 'next/image';
 
 
-function ServerRow({id,username,domain,website,discord,country,tags,thumbnail,description,rank,players}) {
+function ServerRow({id,username,domain,website,discord,country,tags,thumbnail,description,rank,players,version,votifierip,votifierport,votifiertoken,status}) {
     const router = useRouter();
     const dispatch = useDispatch();
 
@@ -23,20 +23,21 @@ function ServerRow({id,username,domain,website,discord,country,tags,thumbnail,de
                 description,
                 rank,
                 players,
+                votifierip,
+                votifierport,
+                votifiertoken,
+                version,
+                status
 
             })
         )
-        router.push("/ServerInfo");
+        router.push({
+            pathname: '/[pid]',
+            query: { pid: id },
+          })
     }
     return (
         <div className="flex flex-col divide-y-4 divide-blue-600 bg-gray-300" onClick={openServer}>
-            <h3>{username}</h3>
-            <h3>{rank}</h3>
-            <h3>{website}</h3>
-            <h3>{discord}</h3>
-            <h3>{country}</h3>
-            <h3>{tags}</h3>
-            <h3 >{description}</h3>
             <Image
             className=""
             src={thumbnail}
