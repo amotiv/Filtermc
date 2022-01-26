@@ -48,8 +48,8 @@ function Body() {
       }
     useEffect(() => {
         getAll();
-        const q = query(collection(db, 'servers'), orderBy('domain'))
-        const u = query(collection(db, 'servers'), orderBy('username'))
+        const q = query(collection(db, 'servers'))
+        const u = query(collection(db, 'servers'))
         onSnapshot(q, (querySnapshot) => {
           setMostPopular(querySnapshot.docs.map(doc => ({
             id: doc.id,
@@ -64,7 +64,7 @@ function Body() {
         })
       },[])
     return (
-        <div className="bg-blue-600 h-screen w-screen">
+        <div className="h-screen w-screen">
             <p className="text-white font-bold text-xl mx-7">Most Popular Servers </p>
             <div className="flex flex-row space-x-2 mx-7">
             {mostpopular.map(({ id, data: { username, domain, rank,website,discord,players,thumbnail,version,status,tags,description } }) => (

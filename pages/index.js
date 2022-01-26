@@ -35,7 +35,7 @@ export default function Home() {
   return (
 
 
-    <div className="divide-y-4 divide-blue-600">
+    <div className="bg-gradient-to-b from-gray-300 via-blue-500 to-gray-300">
 
       <Header />
       <Body />

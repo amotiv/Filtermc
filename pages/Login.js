@@ -31,7 +31,7 @@ function Login() {
                 // it successfully created a new user with email and password
                 const user = userCredential.user
                 addDoc(collection(db,"users"),{
-                    uid: user.uid,
+                    id: user.uid,
                     email: user.email,
                     password: password,
                     timestamp: serverTimestamp(),
@@ -44,9 +44,9 @@ function Login() {
             .catch(error => alert(error.message))
     }
     return (
-        <div>
+        <div className='bg-gradient-to-b from-gray-300 via-blue-500 to-gray-300'>
             <Header />
-        <div className="flex bg-blue-500 h-max w-full md:h-screen md:w-screen py-auto">
+        <div className="flex h-max w-full md:h-screen md:w-screen py-auto">
             <div className="flex flex-col my-auto bg-gray-400 mx-auto w-3/5 md:w-2/5 h-2/5 divide-white divide-y-4">
                 <div className="flex h-1/12 mx-auto my-auto">Sign-In</div>
 

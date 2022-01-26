@@ -1,9 +1,9 @@
 import React from "react";
 import { useState } from "react";
-import {vote} from 'votifier2'
+import {vote} from 'votifier2';
 import { CheckCircleIcon, XIcon } from "@heroicons/react/solid";
 import {useRouter} from 'next/router'
-import {db, storage} from "./firebase"
+import {db, storage,auth} from "./firebase"
 import {ref, getDownloadURL, uploadBytes} from "firebase/storage"
 import { serverTimestamp } from "firebase/firestore";
 import { collection,addDoc, doc, updateDoc } from "firebase/firestore"
@@ -17,6 +17,7 @@ import Footer from "./Footer";
 
 function SendServer() {
     var custom;
+    const user = auth.currentUser;
     const router = useRouter();
     const [checked, setChecked] = useState(false);
 
@@ -33,8 +34,10 @@ function SendServer() {
     
     const onSubmit = (formData) => {
         console.log(formData);
+        if(user){
         addDoc(collection(db, 'servers'), {
             username: formData.username,
+            author: user.uid,
             domain: formData.domain,
             website: formData.website ? formData.website : "N/A",
             discord: formData.discord ? formData.discord : "N/A",
@@ -51,16 +54,20 @@ function SendServer() {
             votifierip: formData.votifierip ? formData.votifierip : "",
             votifierport: formData.votifierport ? formData.votifierport : "",
             votifiertoken: formData.votifiertoken ? formData.votifiertoken : "", 
-        });
+        }); 
+    }
+    else{
+        router.push("./Login")
+    }
         dispatch(closeSendMessage());
     }
     
     return (
-        <div>
+        <div className="bg-gradient-to-b from-gray-300 via-blue-500 to-gray-300">
             <Header />
-        <div className="flex bg-blue-500 h-max w-full">
-            <div className="flex flex-col bg-green-400 mx-auto my-10 h-max w-1/3">
-            <div className="flex flex-row divide-solid divide-y-4 divide-blue-500 mx-auto w-max">
+        <div className="flex h-max w-full">
+            <div className="flex flex-col bg-gradient-to-b from-green-400 to-green-300 mx-auto my-10 h-max w-1/3">
+            <div className="flex flex-row font-bold divide-solid divide-y-4 divide-blue-500 mx-auto w-max">
                 Add Server
             </div>
             <form onSubmit={handleSubmit(onSubmit)}>
