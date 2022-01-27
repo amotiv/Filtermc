@@ -48,8 +48,8 @@ function Body() {
       }
     useEffect(() => {
         getAll();
-        const q = query(collection(db, 'servers'))
-        const u = query(collection(db, 'servers'))
+        const q = query(collection(db, 'users'))
+        const u = query(collection(db, 'users'))
         onSnapshot(q, (querySnapshot) => {
           setMostPopular(querySnapshot.docs.map(doc => ({
             id: doc.id,

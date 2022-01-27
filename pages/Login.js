@@ -31,7 +31,7 @@ function Login() {
                 // it successfully created a new user with email and password
                 const user = userCredential.user
                 addDoc(collection(db,"users"),{
-                    id: user.uid,
+                    uid: user.uid,
                     email: user.email,
                     password: password,
                     timestamp: serverTimestamp(),

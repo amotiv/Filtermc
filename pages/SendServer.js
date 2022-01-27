@@ -35,7 +35,7 @@ function SendServer() {
     const onSubmit = (formData) => {
         console.log(formData);
         if(user){
-        addDoc(collection(db, 'servers'), {
+            addDoc(collection(db, 'servers'), {
             username: formData.username,
             author: user.uid,
             domain: formData.domain,
